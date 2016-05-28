@@ -60,6 +60,7 @@ function setupMenus(){
 		menuParameters("QA Test > Smoke Test", "Smoke Test QA Pass - SUCCESS");
 		menuParameters("QA Test > Smoke Test", "Generate Smoke Test [CUT + PASTE RESULT]");
 		menuParameters("QA Test > Smoke Test", "Generate Domain Stats Report [CUT + PASTE RESULT]");
+		menuParameters("QA Test > Smoke Test", "Generate Dev Domain Stats Report [CUT + PASTE RESULT]");
 		Menu.addMenu("QA Test > HMD RC Test");
 		menuParameters("QA Test > HMD RC Test", "HMD RC Test Instructions");
 		menuParameters("QA Test > HMD RC Test", "EYE-01 Test - SUCCESS");
@@ -164,6 +165,10 @@ function menuItemEvent(menuItem){
 	if(Menu.isOptionChecked("Generate Domain Stats Report [CUT + PASTE RESULT]")){
 		generateDomainStatsReport();
 		Menu.setIsOptionChecked("Generate Domain Stats Report [CUT + PASTE RESULT]", false);
+	}
+	if(Menu.isOptionChecked("Generate Dev Domain Stats Report [CUT + PASTE RESULT]")){
+		generateDevDomainStatsReport();
+		Menu.setIsOptionChecked("Generate Dev Domain Stats Report [CUT + PASTE RESULT]", false);
 	}
 	if(menuItem == "HMD RC Test Instructions"){
 		null;
@@ -405,6 +410,116 @@ function generateDomainStatsReport(){
 	});
 }
 
+// Function to generate domain stats report.
+function generateDevDomainStatsReport(){
+	print("Launching Web Window...");
+
+	var htmlUrl = Script.resolvePath("qaTest20dsr.html")
+	webWindow = new OverlayWebWindow('Dev Domain Stats Report', htmlUrl, 550, 560, false);
+	webWindow.webEventReceived.connect(function(data){
+		print("JS Side Event Received: " + data);
+	});
+
+	Script.setInterval(function(){
+		if(Window.location.hostname == "localhost"){
+			MyStats.domainInfo = Window.location.hostname;
+			MyStats.renderRate = Math.round(Stats.renderrate);
+			MyStats.presentRate = Math.round(Stats.presentrate);
+			MyStats.presentNewRate = Math.round(Stats.presentnewrate);
+			MyStats.bufferCPUCount = Render.getConfig("Stats").bufferCPUCount;
+			MyStats.bufferGPUCount = Render.getConfig("Stats").bufferGPUCount;
+			MyStats.bufferCPUMemoryUsage = Render.getConfig("Stats").bufferCPUMemoryUsage;
+			MyStats.bufferGPUMemoryUsage = Render.getConfig("Stats").bufferGPUMemoryUsage;
+			MyStats.textureCPUCount = Render.getConfig("Stats").textureCPUCount;
+			MyStats.textureGPUCount = Render.getConfig("Stats").textureGPUCount;
+			MyStats.textureGPUTransferCount = Render.getConfig("Stats").textureGPUTransferCount;
+			MyStats.textureCPUMemoryUsage = Render.getConfig("Stats").textureCPUMemoryUsage;
+			MyStats.textureGPUMemoryUsage = Render.getConfig("Stats").textureGPUMemoryUsage;
+			MyStats.textureGPUVirtualMemoryUsage = Render.getConfig("Stats").textureGPUVirtualMemoryUsage;
+			MyStats.frameTriangleCount = Render.getConfig("Stats").frameTriangleCount;
+			MyStats.frameTriangleRate = Render.getConfig("Stats").frameTriangleRate;
+			MyStats.frameAPIDrawcallCount = Render.getConfig("Stats").frameAPIDrawcallCount;
+			MyStats.frameDrawcallCount = Render.getConfig("Stats").frameDrawcallCount;
+			MyStats.frameDrawcallRate = Render.getConfig("Stats").frameDrawcallRate;
+			MyStats.frameTextureCount = Render.getConfig("Stats").frameTextureCount;
+			MyStats.frameSetPipelineCount = Render.getConfig("Stats").frameSetPipelineCount;
+			MyStats.itemOpaques = Render.getConfig("DrawOpaqueDeferred").numDrawn;
+			MyStats.itemTranslucents = Render.getConfig("DrawTransparentDeferred").numDrawn;
+			MyStats.itemLights = Render.getConfig("DrawLight").numDrawn;
+			MyStats.timingOpaques = Render.getConfig("DrawOpaqueDeferred").cpuRunTime;
+			MyStats.timingTranslucents = Render.getConfig("DrawTransparentDeferred").cpuRunTime;
+			MyStats.timingLighting = Render.getConfig("RenderDeferred").cpuRunTime;
+			MyStats.renderFrame = Render.getConfig("RenderDeferredTask").cpuRunTime;
+		} else if(Window.location.hostname == "dev-playa"){
+			MyStats.domainInfo_playa = Window.location.hostname;
+			MyStats.renderRate_playa = Math.round(Stats.renderrate);
+			MyStats.presentRate_playa = Math.round(Stats.presentrate);
+			MyStats.presentNewRate_playa = Math.round(Stats.presentnewrate);
+			MyStats.bufferCPUCount_playa = Render.getConfig("Stats").bufferCPUCount;
+			MyStats.bufferGPUCount_playa = Render.getConfig("Stats").bufferGPUCount;
+			MyStats.bufferCPUMemoryUsage_playa = Render.getConfig("Stats").bufferCPUMemoryUsage;
+			MyStats.bufferGPUMemoryUsage_playa = Render.getConfig("Stats").bufferGPUMemoryUsage;
+			MyStats.textureCPUCount_playa = Render.getConfig("Stats").textureCPUCount;
+			MyStats.textureGPUCount_playa = Render.getConfig("Stats").textureGPUCount;
+			MyStats.textureGPUTransferCount_playa = Render.getConfig("Stats").textureGPUTransferCount;
+			MyStats.textureCPUMemoryUsage_playa = Render.getConfig("Stats").textureCPUMemoryUsage;
+			MyStats.textureGPUMemoryUsage_playa = Render.getConfig("Stats").textureGPUMemoryUsage;
+			MyStats.textureGPUVirtualMemoryUsage_playa = Render.getConfig("Stats").textureGPUVirtualMemoryUsage;
+			MyStats.frameTriangleCount_playa = Render.getConfig("Stats").frameTriangleCount;
+			MyStats.frameTriangleRate_playa = Render.getConfig("Stats").frameTriangleRate;
+			MyStats.frameAPIDrawcallCount_playa = Render.getConfig("Stats").frameAPIDrawcallCount;
+			MyStats.frameDrawcallCount_playa = Render.getConfig("Stats").frameDrawcallCount;
+			MyStats.frameDrawcallRate_playa = Render.getConfig("Stats").frameDrawcallRate;
+			MyStats.frameTextureCount_playa = Render.getConfig("Stats").frameTextureCount;
+			MyStats.frameSetPipelineCount_playa = Render.getConfig("Stats").frameSetPipelineCount;
+			MyStats.itemOpaques_playa = Render.getConfig("DrawOpaqueDeferred").numDrawn;
+			MyStats.itemTranslucents_playa = Render.getConfig("DrawTransparentDeferred").numDrawn;
+			MyStats.itemLights_playa = Render.getConfig("DrawLight").numDrawn;
+			MyStats.timingOpaques_playa = Render.getConfig("DrawOpaqueDeferred").cpuRunTime;
+			MyStats.timingTranslucents_playa = Render.getConfig("DrawTransparentDeferred").cpuRunTime;
+			MyStats.timingLighting_playa = Render.getConfig("RenderDeferred").cpuRunTime;
+			MyStats.renderFrame_playa = Render.getConfig("RenderDeferredTask").cpuRunTime;
+		} else if(Window.location.hostname == "dev-cell"){
+			MyStats.domainInfo_cellscience = Window.location.hostname;
+			MyStats.renderRate_cellscience= Math.round(Stats.renderrate);
+			MyStats.presentRate_cellscience = Math.round(Stats.presentrate);
+			MyStats.presentNewRate_cellscience = Math.round(Stats.presentnewrate);
+			MyStats.bufferCPUCount_cellscience = Render.getConfig("Stats").bufferCPUCount;
+			MyStats.bufferGPUCount_cellscience = Render.getConfig("Stats").bufferGPUCount;
+			MyStats.bufferCPUMemoryUsage_cellscience = Render.getConfig("Stats").bufferCPUMemoryUsage;
+			MyStats.bufferGPUMemoryUsage_cellscience = Render.getConfig("Stats").bufferGPUMemoryUsage;
+			MyStats.textureCPUCount_cellscience = Render.getConfig("Stats").textureCPUCount;
+			MyStats.textureGPUCount_cellscience = Render.getConfig("Stats").textureGPUCount;
+			MyStats.textureGPUTransferCount_cellscience = Render.getConfig("Stats").textureGPUTransferCount;
+			MyStats.textureCPUMemoryUsage_cellscience = Render.getConfig("Stats").textureCPUMemoryUsage;
+			MyStats.textureGPUMemoryUsage_cellscience = Render.getConfig("Stats").textureGPUMemoryUsage;
+			MyStats.textureGPUVirtualMemoryUsage_cellscience = Render.getConfig("Stats").textureGPUVirtualMemoryUsage;
+			MyStats.frameTriangleCount_cellscience = Render.getConfig("Stats").frameTriangleCount;
+			MyStats.frameTriangleRate_cellscience = Render.getConfig("Stats").frameTriangleRate;
+			MyStats.frameAPIDrawcallCount_cellscience = Render.getConfig("Stats").frameAPIDrawcallCount;
+			MyStats.frameDrawcallCount_cellscience = Render.getConfig("Stats").frameDrawcallCount;
+			MyStats.frameDrawcallRate_cellscience = Render.getConfig("Stats").frameDrawcallRate;
+			MyStats.frameTextureCount_cellscience= Render.getConfig("Stats").frameTextureCount;
+			MyStats.frameSetPipelineCount_cellscience = Render.getConfig("Stats").frameSetPipelineCount;
+			MyStats.itemOpaques_cellscience = Render.getConfig("DrawOpaqueDeferred").numDrawn;
+			MyStats.itemTranslucents_cellscience = Render.getConfig("DrawTransparentDeferred").numDrawn;
+			MyStats.itemLights_cellscience = Render.getConfig("DrawLight").numDrawn;
+			MyStats.timingOpaques_cellscience = Render.getConfig("DrawOpaqueDeferred").cpuRunTime;
+			MyStats.timingTranslucents_cellscience = Render.getConfig("DrawTransparentDeferred").cpuRunTime;
+			MyStats.timingLighting_cellscience = Render.getConfig("RenderDeferred").cpuRunTime;
+			MyStats.renderFrame_cellscience = Render.getConfig("RenderDeferredTask").cpuRunTime;
+		}		
+		var message = JSON.stringify(MyStats);
+		print("JS Side sending: " + message);
+		webWindow.emitScriptEvent(message);
+	}, 1 * 1000);
+
+	var MyStats = {};
+	Script.scriptEnding.connect(function(){
+		webWindow.close();
+		webWindow.deleteLater();
+	});
+}
 // Function to generate HMD RC Manual Testing report.
 function generateHMDRCManualTestingReport(){
 	additionalTestResultsObservations = Window.prompt("Enter Additional Test Results + Observations");
